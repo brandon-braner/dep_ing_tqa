@@ -9,3 +9,4 @@ def get_db_conn():
 
     conn = sqlite3.connect(db)
     return conn, conn.cursor()
+

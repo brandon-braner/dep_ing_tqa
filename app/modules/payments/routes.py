@@ -1,17 +1,23 @@
 # fastapi router
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.db import get_db_conn
+
+from app.modules.payments.service import PaymentService
+from app.modules.payments.utils import payment_service as payment_service_util
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 
 
 @router.get("")
-def get_payments():
-    # call the function directly
-    _, cursor = get_db_conn()
-    cursor.execute("SELECT * FROM payments")
-    payments = cursor.fetchall()
+def get_payments(payment_service: PaymentService = Depends(payment_service_util)):
+    payments = payment_service.get_payments()
     return {"payments": payments}
+
+
+@router.get("/test")
+def get_payments_test(db=Depends(get_db_conn)):
+    resp = PaymentService(db).test_payments_endpoint()
+    return {"resp": resp}
 
 
 @router.post("")

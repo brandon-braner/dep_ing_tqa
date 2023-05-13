@@ -21,3 +21,13 @@ class SqlLiteConnection:
 
         self.conn = sqlite3.connect(db)
         self.cursor = self.conn.cursor()
+
+
+def _auto_close_db_connection():
+    # this is a helper function to close the connection when the request is done
+    # this is a helper function to close the connection when the request is done
+    def _close_db_connection():
+        conn, _ = get_db_conn()
+        conn.close()
+
+    return _close_db_connection
